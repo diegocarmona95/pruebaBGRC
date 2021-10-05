@@ -2,7 +2,6 @@
     <div>
        <nav-header/>
         <div class="container">
-         <h2> hola app </h2>
         </div>
         <nav-footer />
     </div>
