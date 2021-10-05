@@ -1,18 +1,13 @@
 <template>
     <div>
-       <nav-header/>
-        <div class="container">
-         <h2> Registro de Vehiculos y Personas </h2>
-        </div>
-        <nav-footer />
+       asdasdadsd home
     </div>
 </template>
 
 <script>
-import NavHeader from './layout/NavHeader.vue';
-import NavFooter from './layout/NavFooter.vue';
+
     export default {
-        components:{NavHeader, NavFooter}
+        components:{}
     }
 </script>
 
