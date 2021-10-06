@@ -24,6 +24,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::post('/registrarVehiculo', [App\Http\Controllers\VehiculoController::class, 'registrarVehiculo']);
 Route::get('/listarVehiculos', [App\Http\Controllers\VehiculoController::class, 'listarVehiculos']);
 Route::post('/eliminarVehiculo', [App\Http\Controllers\VehiculoController::class, 'eliminarVehiculo']);
+Route::post('/historico', [App\Http\Controllers\VehiculoController::class, 'historicoVehiculosPersona']);
+Route::get('/vehiculosPorAnno', [App\Http\Controllers\VehiculoController::class, 'vehiculosPorAnno']);
 
 //Personas
 Route::get('/listarPersonas', [App\Http\Controllers\PersonaController::class, 'listarPersonas']);

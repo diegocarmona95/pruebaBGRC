@@ -15,4 +15,9 @@ class Vehiculo extends Model
     {
         return $this->belongsTo('App\Models\Persona', 'dueno', 'id');
     }
+
+    public function vehiculo_historico()
+    {
+        return $this->hasMany('App\Models\HistoricoPersonaVehiculo');
+    }
 }

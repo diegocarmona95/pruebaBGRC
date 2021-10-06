@@ -9,8 +9,8 @@
                         v-model="vehiculo.marca"
                         required
                         >
-                            <option :value="null" disabled>-- Seleccione la Marca --</option>
-                            <option v-for="marca in marcas" :value="marca">
+                            <option :value="null" disabled selected>-- Seleccione la Marca --</option>
+                            <option v-for="marca in marcas" :value="marca" :key="marca">
                                 {{ marca}}
                             </option>
                         </b-form-select>
@@ -21,7 +21,7 @@
                         required
                         >
                             <option :value="null" disabled>-- Seleccione el Modelo --</option>
-                            <option v-for="modelo in modelos" :value="modelo">
+                            <option v-for="modelo in modelos" :value="modelo" :key="modelo">
                                 {{ modelo}}
                             </option>
                         </b-form-select>
@@ -46,8 +46,8 @@
                     </b-form-group>
                      <b-form-group id="input-group-5" label="Dueño:" label-for="input-5">
                         <b-form-select v-model="vehiculo.dueno">
-                            <option :value="null" disabled>-- Seleccione al dueño --</option>
-                            <option v-for="persona in personas" :value="persona.id">
+                            <option :value="null" disabled selected>-- Seleccione al dueño --</option>
+                            <option v-for="persona in personas" :value="persona.id" :key="persona.id">
                             {{ persona.nombre + ' ' + persona.apellidos }}
                             </option>
                         </b-form-select>
@@ -249,7 +249,11 @@ export default {
         handlePageChange(value) {
             this.currentPage = value;
             this.listarVehiculos();
-        }
+        },
+
+        countDownChanged(dismissCountDown) {
+            this.dismissCountDown = dismissCountDown
+        },
 
     },
     computed:{

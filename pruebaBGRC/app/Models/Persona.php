@@ -15,4 +15,8 @@ class Persona extends Model
     {
         return $this->hasMany('App\Models\Vehiculo');
     }
+    public function persona_historico()
+    {
+        return $this->hasMany('App\Models\HistoricoPersonaVehiculo');
+    }
 }
