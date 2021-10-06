@@ -17,9 +17,11 @@ class CreateVehiculosTable extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('nombre')->nullable();
-            $table->string('apellidos')->nullable();
-            $table->string('correo')->nullable();
+            $table->string('marca')->nullable();
+            $table->string('modelo')->nullable();
+            $table->integer('anno')->nullable();
+            $table->string('dueno')->nullable();
+            $table->integer('precio')->nullable();
         });
     }
 

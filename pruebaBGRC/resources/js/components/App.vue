@@ -1,9 +1,11 @@
 <template>
     <div>
+
        <nav-header/>
         <div class="container">
+        <router-view/>
         </div>
-        <nav-footer />
+     
     </div>
 </template>
 
