@@ -13,6 +13,8 @@
             </b-table>
         </div>
 
+        <grafico-por-anno :dataVehiculos="vehiculosPorYear" />       
+
         <div class="yearTable">
             <h4>Datos historicos vehiculos</h4>
             <b-form>
@@ -57,9 +59,9 @@
 </template>
 
 <script>
-
+import GraficoPorAnno from './graficos/GraficoPorAnno.vue'
 export default {
-components:{},
+components:{GraficoPorAnno},
 data(){
     return{
         vehiculosPorYear:[],
@@ -67,8 +69,8 @@ data(){
         personas:[],
         dueno:null,
         fieldsYear:[{ key: 'anno', label: 'Año Vehiculo' }, {key: 'cantidad_vehiculos', label: 'Cantidad'}],
-        fieldsHistorico:[{key: 'persona', label:'Dueño'},{key: 'marca', label: 'Marca'}, {key:'modelo', label:'Modelo'}, {key: 'anno', label: 'Año Modelo'}]
-    }
+        fieldsHistorico:[{key: 'persona', label:'Dueño'},{key: 'marca', label: 'Marca'}, {key:'modelo', label:'Modelo'}, {key: 'anno', label: 'Año Modelo'}],
+      }
 },
 created(){
     this.listarPersonas();

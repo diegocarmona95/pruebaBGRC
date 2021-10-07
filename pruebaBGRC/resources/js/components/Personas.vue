@@ -166,7 +166,7 @@ export default {
 
         handlePageChange(value) {
             this.currentPage = value;
-            this.listarPersonas();
+            this.listarPersonasTabla();
         },
 
         resetPersona(){
