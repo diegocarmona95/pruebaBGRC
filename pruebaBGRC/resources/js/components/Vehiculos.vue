@@ -7,24 +7,32 @@
                    <b-form-group label="Marca:">
                        <b-form-select
                         v-model="vehiculo.marca"
-                        required
+                         :state='validateForm.marca'
+                        aria-describedby="input-1-feedback"
                         >
                             <option :value="null" disabled selected>-- Seleccione la Marca --</option>
                             <option v-for="marca in marcas" :value="marca" :key="marca">
                                 {{ marca}}
                             </option>
                         </b-form-select>
+                        <b-form-invalid-feedback id="input-1-feedback">
+                            Debe ingresar la marca
+                        </b-form-invalid-feedback>
                     </b-form-group>
                     <b-form-group label="Modelo:">
                        <b-form-select
                         v-model="vehiculo.modelo"
-                        required
+                        :state='validateForm.modelo'
+                        aria-describedby="input-2-feedback"
                         >
                             <option :value="null" disabled>-- Seleccione el Modelo --</option>
                             <option v-for="modelo in modelos" :value="modelo" :key="modelo">
                                 {{ modelo}}
                             </option>
                         </b-form-select>
+                        <b-form-invalid-feedback id="input-2-feedback">
+                            Debe ingresar el modelo
+                        </b-form-invalid-feedback>
                     </b-form-group>
                      <b-form-group id="input-group-3" label="Año:" label-for="input-3">
                         <b-form-input
@@ -32,8 +40,12 @@
                         v-model="vehiculo.anno"
                         placeholder="Año"
                         type="number"
-                        required
+                        :state='validateForm.anno'
+                        aria-describedby="input-3-feedback"
                         ></b-form-input>
+                        <b-form-invalid-feedback id="input-3-feedback">
+                            Debe ingresar el año
+                        </b-form-invalid-feedback>
                     </b-form-group>
                     <b-form-group id="input-group-4" label="Precio:" label-for="input-4">
                         <b-form-input
@@ -41,8 +53,12 @@
                         type="number"
                         v-model="vehiculo.precio"
                         placeholder="Precio"
-                        required
+                        :state='validateForm.precio'
+                        aria-describedby="input-4-feedback"
                         ></b-form-input>
+                        <b-form-invalid-feedback id="input-4-feedback">
+                            Debe ingresar el precio
+                        </b-form-invalid-feedback>
                     </b-form-group>
                      <b-form-group id="input-group-5" label="Dueño:" label-for="input-5">
                         <b-form-select v-model="vehiculo.dueno">
@@ -123,7 +139,7 @@ export default {
                 dueno: null,
                 marca: null,
                 modelo: null,
-                precio: 0
+                precio: null
             },
             vehiculos: [],
             isBusy: false,
@@ -138,7 +154,13 @@ export default {
             showDismissibleAlert: false,
             message: '',
             variantMessage: '',
-            accionBoton: 'Registrar'
+            accionBoton: 'Registrar',
+            validateForm:{
+                anno:null,
+                marca: null,
+                modelo: null,
+                precio: null
+            }
         }
     },
     created(){
@@ -148,27 +170,30 @@ export default {
     methods:{
         registrarVehiculo(event){
             event.preventDefault()
-            axios.post('/registrarVehiculo', {
-                vehiculo: this.vehiculo
-            })
-            .then((response) => {
-                if(response.data.status == 'ok'){
-                    this.variantMessage = 'success';
-                    this.message = this.vehiculo.id == 0 ? 'El vehiculo ha sido registrado': 'El vehiculo ha sido actualizado';
-                    this.dismissCountDown = this.dismissSecs
-                    this.listarVehiculos();
-                    this.resetVehiculo();
-                }else{
-                    alert(response.data.errores.join(', '))
-                }
-                
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-            .finally((e) =>{
-                // always executed
-            }); 
+            if(this.validarFormulario()){
+                axios.post('/registrarVehiculo', {
+                    vehiculo: this.vehiculo
+                })
+                .then((response) => {
+                    if(response.data.status == 'ok'){
+                        this.variantMessage = 'success';
+                        this.message = this.vehiculo.id == 0 ? 'El vehiculo ha sido registrado': 'El vehiculo ha sido actualizado';
+                        this.dismissCountDown = this.dismissSecs
+                        this.listarVehiculos();
+                        this.resetVehiculo();
+                    }else{
+                        alert(response.data.errores.join(', '))
+                    }
+                    
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+                .finally((e) =>{
+                    // always executed
+                }); 
+            }
+     
         },
 
         listarVehiculos(){
@@ -234,6 +259,11 @@ export default {
             this.vehiculo.precio = null;
             this.vehiculo.id = 0;
             this.accionBoton = 'Registrar';
+            //Resetear State de validacion
+            this.validateForm.anno = null;
+            this.validateForm.marca = null;
+            this.validateForm.modelo = null;
+            this.validateForm.precio = null;
         },
 
         editarVehiculo(row){
@@ -254,6 +284,39 @@ export default {
         countDownChanged(dismissCountDown) {
             this.dismissCountDown = dismissCountDown
         },
+
+        validarFormulario(){
+            var flag = true;
+            if(!this.vehiculo.anno){
+                this.validateForm.anno = false;
+                flag = false;
+            }else{
+                this.validateForm.anno = true;
+                flag = true; 
+            }
+            if(!this.vehiculo.marca){
+                this.validateForm.marca = false;
+                flag = false;
+            }else{
+                this.validateForm.marca = true;
+                flag = true; 
+            }
+            if(!this.vehiculo.modelo){
+                this.validateForm.modelo = false;
+                flag = false;
+            }else{
+                this.validateForm.modelo = true;
+                flag = true; 
+            }
+            if(!this.vehiculo.precio){
+                this.validateForm.precio = false;
+                flag = false;
+            }else{
+                this.validateForm.precio = true;
+                flag = true; 
+            }
+            return flag;
+        }
 
     },
     computed:{

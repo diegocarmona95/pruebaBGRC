@@ -3,16 +3,22 @@
         <h3> Personas </h3> 
 
         <div class="form">
-            <b-form @submit="registrarPersona" @reset="resetPersona">
+            <b-form @submit.stop.prevent="registrarPersona" @reset="resetPersona">
                 <b-form-group label="Nombre:">
                     <b-form-input
                         id="input-1"
                         type="text"
                         v-model="persona.nombre"
                         placeholder="Nombre"
-                        required>
+                        :state='validateForm.nombre'
+                        aria-describedby="input-1-feedback"
+                        trim>
                     </b-form-input>
+                    <b-form-invalid-feedback id="input-1-feedback">
+                        Debe ingresar el nombre de la persona
+                    </b-form-invalid-feedback>
                 </b-form-group>
+            
 
                 <b-form-group label="Apellidos:">
                     <b-form-input
@@ -20,8 +26,14 @@
                         type="text"
                         v-model="persona.apellidos"
                         placeholder="Apellidos"
-                        required>
+                        :state='validateForm.apellidos'
+                        aria-describedby="input-2-feedback"
+                        trim
+                        >
                     </b-form-input>
+                    <b-form-invalid-feedback id="input-2-feedback">
+                        Debe ingresar los apellidos de la persona
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
                  <b-form-group label="Correo:">
@@ -30,8 +42,14 @@
                         type="email"
                         v-model="persona.correo"
                         placeholder="Correo"
-                        required>
+                        :state='validateForm.correo'
+                        aria-describedby="input-3-feedback"
+                        trim
+                        >
                     </b-form-input>
+                    <b-form-invalid-feedback id="input-3-feedback">
+                        Debe ingresar el correo de la persona
+                    </b-form-invalid-feedback>
                 </b-form-group>
 
                 <b-form-group class="cont-botones">
@@ -109,7 +127,12 @@ export default {
             showDismissibleAlert: false,
             message: '',
             variantMessage: '',
-            accionBoton: 'Registrar'
+            accionBoton: 'Registrar',
+            validateForm:{
+                nombre:null,
+                apellidos: null,
+                correo: null
+            }
         }
     },
     created(){
@@ -175,35 +198,72 @@ export default {
             this.persona.apellidos = null;
             this.persona.correo = null; 
             this.accionBoton = 'Registrar'
+            //Resetar state de validacion
+            this.validateForm.nombre = null;
+            this.validateForm.apellidos = null;
+            this.validateForm.correo = null;
         },
 
         registrarPersona(event){
             event.preventDefault()
-            axios.post('/registrarActualizarPersona', {
-                persona: this.persona
-            })
-            .then((response) => {
-                if(response.data.status == 'ok'){
-                    this.variantMessage = 'success';
-                    this.message = this.persona.id == 0 ? 'El usuario ha sido registrado': 'El usuario ha sido actualizado';
-                    this.dismissCountDown = this.dismissSecs
-                    this.listarPersonasTabla();
-                    this.resetPersona();
-                }else{
-                    alert(response.data.errores.join(', '))
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-            .finally((e) =>{
-                // always executed
-            }); 
+            if(this.validarFormulario()){
+                axios.post('/registrarActualizarPersona', {
+                    persona: this.persona
+                })
+                .then((response) => {
+                    if(response.data.status == 'ok'){
+                        this.variantMessage = 'success';
+                        this.message = this.persona.id == 0 ? 'El usuario ha sido registrado': 'El usuario ha sido actualizado';
+                        this.dismissCountDown = this.dismissSecs
+                        this.listarPersonasTabla();
+                        this.resetPersona();
+                    }else{
+                        alert(response.data.errores.join(', '))
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+                .finally((e) =>{
+                    // always executed
+                }); 
+            }
+        
         },
 
         countDownChanged(dismissCountDown) {
             this.dismissCountDown = dismissCountDown
         },
+
+        validarFormulario(){
+            var flag = true;
+            if(!this.persona.nombre){
+                this.validateForm.nombre = false;
+                flag = false;
+            }else{
+                this.validateForm.nombre = true;
+                flag = true; 
+            }
+
+             if(!this.persona.apellidos){
+                this.validateForm.apellidos = false;
+                flag = false;
+            }else{
+                this.validateForm.apellidos = true;
+                flag = true; 
+            }
+
+             if(!this.persona.correo){
+                this.validateForm.correo = false;
+                flag = false;
+            }else{
+                this.validateForm.correo = true;
+                flag = true; 
+            }
+            return flag;
+        }
+    },
+    computed:{
     }
 }
 </script>
