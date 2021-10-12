@@ -13,10 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
-
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -32,3 +28,9 @@ Route::get('/listarPersonas', [App\Http\Controllers\PersonaController::class, 'l
 Route::get('/listarPersonasTabla', [App\Http\Controllers\PersonaController::class, 'listarPersonasTabla']);
 Route::post('/registrarActualizarPersona', [App\Http\Controllers\PersonaController::class, 'registrarActualizarPersona']);
 Route::post('/eliminarPersona', [App\Http\Controllers\PersonaController::class, 'eliminarPersona']);
+
+
+//Siempre debe ir al final
+Route::get('/{any}', function () {
+    return view('home');
+})->where('any', '.*');
